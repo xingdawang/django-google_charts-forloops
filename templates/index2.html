@@ -1,0 +1,48 @@
+<html>
+      <head>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      {%for item in test %}
+      var data = "data" + "{{item}}";
+      var data = google.visualization.arrayToDataTable([
+        ["Element", "Density", { role: "style" } ],
+        ["Copper", 8.94, "#b87333"],
+        ["Silver", 10.49, "silver"],
+        ["Gold", 19.30, "gold"]
+      ]);
+
+      var view = "view" + "{{item}}";
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      var options = "options" + "{{item}}";
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = "chart" + "{{item}}";
+      var chart = new google.visualization.ColumnChart(document.getElementById("{{item}}"));
+      chart.draw(view, options);
+      {%endfor%}
+  }
+  </script>
+      </head>
+
+      <body>
+        <!--Divs that will hold the charts-->
+        {% for item in test %}
+          <div id="{{item}}"></div>
+        {% endfor %}
+      </body>
+    </html>
